@@ -1,0 +1,17 @@
+# .gitignore — tell Git which files to leave alone.
+
+# Secrets: the real .env must never be committed.
+.env
+# Also ignore environment-specific variants like .env.local ...
+.env.*
+# ... but keep the safe template so teammates know which keys are needed.
+!.env.example
+
+# Python bytecode caches
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+env/
