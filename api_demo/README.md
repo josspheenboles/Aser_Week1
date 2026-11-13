@@ -138,6 +138,48 @@ each todo item.
 `raise_for_status()` is a shortcut that raises an exception for any `4xx` or
 `5xx` code, so you do not have to write an `if` statement yourself.
 
+## Bonus: GET one resource by ID
+
+`get_by_id_demo.py` shows the most common REST pattern: put the id in the URL
+path to fetch one specific resource.
+
+```bash
+python get_by_id_demo.py       # tries ids 1, 3, and 9999
+python get_by_id_demo.py 5     # tries the id you pass in
+```
+
+Example output:
+
+```text
+==============================================================
+=== GET by ID Demo ===
+==============================================================
+The id is part of the URL path: /users/<id>
+Looking up ids: [1, 3, 9999]
+
+--- User id 1 ---
+  Request: GET https://jsonplaceholder.typicode.com/users/1
+  Status code: 200
+  Name:     Leanne Graham
+  Username: Bret
+  Email:    Sincere@april.biz
+  City:     Gwenborough
+  Company:  Romaguera-Crona
+
+--- User id 9999 ---
+  Request: GET https://jsonplaceholder.typicode.com/users/9999
+  Status code: 404
+  No user exists with id=9999.
+```
+
+Key point: a `404` is **not** an exception. `requests.get()` returns normally,
+and you decide what to do by checking `response.status_code`. If you would
+rather have `4xx`/`5xx` raise an error, call `response.raise_for_status()`.
+
+The script also reads nested fields such as `user["address"]["city"]` and
+accepts an optional command-line id, so `python get_by_id_demo.py 5` looks up
+user 5 only.
+
 ## Troubleshooting
 
 | Problem | Fix |
@@ -169,7 +211,8 @@ each todo item.
 
 | File | Purpose |
 | --- | --- |
-| `api_caller.py` | The annotated API demo |
+| `api_caller.py` | The annotated API demo (weather + todo list) |
+| `get_by_id_demo.py` | GET one resource by id, including the 404 case |
 | `README.md` | This guide |
 
 ## Key vocabulary
