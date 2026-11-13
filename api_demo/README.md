@@ -180,6 +180,66 @@ The script also reads nested fields such as `user["address"]["city"]` and
 accepts an optional command-line id, so `python get_by_id_demo.py 5` looks up
 user 5 only.
 
+## Bonus: POST, PUT, PATCH, and DELETE
+
+`http_methods_demo.py` demonstrates the four HTTP methods that change data.
+JSONPlaceholder fakes the writes, so nothing real is created or deleted and it
+is safe to run as often as you like.
+
+```bash
+python http_methods_demo.py
+```
+
+Example output (trimmed):
+
+```text
+==============================================================
+=== 1. POST: create a new post ===
+==============================================================
+  Sending POST https://jsonplaceholder.typicode.com/posts
+  Payload: {'title': 'My first post', 'body': 'Hello from requests!', 'userId': 1}
+  Status code: 201
+  Body returned by the server:
+    {
+      "title": "My first post",
+      "body": "Hello from requests!",
+      "userId": 1,
+      "id": 101
+    }
+  Success: the server assigned id=101.
+
+==============================================================
+=== 3. PATCH: update only the title of post 1 ===
+==============================================================
+  Sending PATCH https://jsonplaceholder.typicode.com/posts/1
+  Payload: {'title': 'Only the title changed'}
+  Status code: 200
+  Body returned by the server:
+    {
+      "userId": 1,
+      "id": 1,
+      "title": "Only the title changed",
+      "body": "quia et suscipit ..."
+    }
+  The title changed, but the original body is still there.
+```
+
+| Method | URL | Payload | Typical success code | Meaning |
+| --- | --- | --- | --- | --- |
+| `POST` | `/posts` | full object | `201 Created` | create a new resource |
+| `PUT` | `/posts/1` | full object | `200 OK` | replace a whole resource |
+| `PATCH` | `/posts/1` | changed fields | `200 OK` | update part of a resource |
+| `DELETE` | `/posts/1` | none | `200 OK` | remove a resource |
+
+Key points:
+
+- Pass data with `json=payload`. `requests` converts the dictionary to JSON
+  text **and** sets the header `Content-Type: application/json` for you.
+- `POST` usually returns `201 Created` and the server assigns an `id`.
+- `PUT` replaces the entire object, so omitted fields are lost.
+- `PATCH` changes only the fields you send; everything else stays as it was.
+- `DELETE` needs no body — the id in the URL identifies the resource.
+
 ## Troubleshooting
 
 | Problem | Fix |
@@ -213,6 +273,7 @@ user 5 only.
 | --- | --- |
 | `api_caller.py` | The annotated API demo (weather + todo list) |
 | `get_by_id_demo.py` | GET one resource by id, including the 404 case |
+| `http_methods_demo.py` | POST, PUT, PATCH, and DELETE examples |
 | `README.md` | This guide |
 
 ## Key vocabulary
